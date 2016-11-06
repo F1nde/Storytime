@@ -24,13 +24,12 @@ public class POIController : MonoBehaviour {
 			POIList.Add(child.gameObject);
 	}
 
-	public void POIFound(GameObject point) 
+	public void POIFound() 
 	{
 		++POIsFound;
-        point.SetActive(false);
 	}
 
-    // Returns current status inside list
+    // Returns current status inside List
     public List<int> POIStatus()
     {
         List<int> status = new List<int>();
@@ -47,10 +46,7 @@ public class POIController : MonoBehaviour {
 
         for (int i = 0; i < POIList.Count; ++i)
         {
-            if (POIList[i].activeSelf == false)
-            {
-                POIList[i].SetActive(true);
-            }
+            POIList[i].GetComponent<POI>().ResetState();
         }
     }
 }

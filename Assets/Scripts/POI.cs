@@ -5,6 +5,9 @@ using System.Collections;
 public class POI : MonoBehaviour, IGvrGazeResponder {
 
 	private POIController controller;
+    public GameObject TextCanvas;
+
+    public string text;
 
 	[SerializeField]
 	private bool isGazed = false;
@@ -16,9 +19,10 @@ public class POI : MonoBehaviour, IGvrGazeResponder {
 	{
 		controller = transform.parent.GetComponent<POIController>();
 		SetGazedAt(false);
-	}
+        //TextCanvas = GameObject.Find("TextCanvas");
+    }
 
-	void LateUpdate () 
+	void LateUpdate ()
 	{
 		GvrViewer.Instance.UpdateState();
 		if (GvrViewer.Instance.BackButtonPressed) {
@@ -29,16 +33,33 @@ public class POI : MonoBehaviour, IGvrGazeResponder {
 			if ((Time.time - gazeStartTime) >= gazeThreshold) {
 				Debug.Log ("POI collected!");
 
-                // Reset state before disapearing
-                isGazed = false;
-                SetGazedAt(false);
-                GetComponent<Renderer>().material.color = Color.red;
-                gazeStartTime = 0f;
+                // Disappear
+                GetComponent<SphereCollider>().enabled = false;
+                GetComponent<MeshRenderer>().enabled = false;
 
-                controller.POIFound(gameObject);
-			}
+                // Send text to TextPanel
+                TextCanvas.GetComponent<TextPanel>().Activate(text);
+
+                // Inform POIController
+                controller.POIFound();
+            }
 		}
 	}
+
+    public void ResetState()
+    {
+        isGazed = false;
+        SetGazedAt(false);
+        GetComponent<Renderer>().material.color = Color.red;
+        gazeStartTime = 0f;
+
+        // Reset textPanel
+        TextCanvas.GetComponent<TextPanel>().DeActivate();
+
+        // Reset deactivated components
+        GetComponent<SphereCollider>().enabled = true;
+        GetComponent<MeshRenderer>().enabled = true;
+    }
 
 	public void SetGazedAt(bool gazedAt) 
 	{
