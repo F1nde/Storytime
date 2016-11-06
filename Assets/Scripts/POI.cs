@@ -28,7 +28,14 @@ public class POI : MonoBehaviour, IGvrGazeResponder {
 		if (isGazed) {
 			if ((Time.time - gazeStartTime) >= gazeThreshold) {
 				Debug.Log ("POI collected!");
-				controller.POIFound(gameObject);
+
+                // Reset state before disapearing
+                isGazed = false;
+                SetGazedAt(false);
+                GetComponent<Renderer>().material.color = Color.red;
+                gazeStartTime = 0f;
+
+                controller.POIFound(gameObject);
 			}
 		}
 	}

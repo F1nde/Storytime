@@ -27,6 +27,17 @@ public class POIController : MonoBehaviour {
 	public void POIFound(GameObject point) 
 	{
 		++POIsFound;
-		Destroy(point);
+        point.SetActive(false);
 	}
+
+    public void POIReset()
+    {
+        for (int i = 0; i < POIList.Count; ++i)
+        {
+            if (POIList[i].activeSelf == false)
+            {
+                POIList[i].SetActive(true);
+            }
+        }
+    }
 }
