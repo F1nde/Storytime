@@ -20,8 +20,15 @@ public class POIController : MonoBehaviour {
 
 	private void FetchPOIs()
 	{
-		foreach (Transform child in transform)
-			POIList.Add(child.gameObject);
+        string name;
+        foreach (Transform child in transform)
+        {
+            name = child.name;
+            if (name.Contains("poi"))
+            {
+                POIList.Add(child.gameObject);
+            }
+        }
 	}
 
 	public void POIFound() 

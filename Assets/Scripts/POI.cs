@@ -13,13 +13,15 @@ public class POI : MonoBehaviour, IGvrGazeResponder {
 	private bool isGazed = false;
 	[Range(0, 3)]
 	public float gazeThreshold = 0f;
+
 	private float gazeStartTime = 0f;
+    private bool isActive;
 
 	void Start ()
 	{
 		controller = transform.parent.GetComponent<POIController>();
 		SetGazedAt(false);
-        //TextCanvas = GameObject.Find("TextCanvas");
+        isActive = true;
     }
 
 	void LateUpdate ()
@@ -29,7 +31,7 @@ public class POI : MonoBehaviour, IGvrGazeResponder {
 			Application.Quit();
 		}
 
-		if (isGazed) {
+		if (isGazed && isActive) {
 			if ((Time.time - gazeStartTime) >= gazeThreshold) {
 				Debug.Log ("POI collected!");
 
@@ -42,12 +44,15 @@ public class POI : MonoBehaviour, IGvrGazeResponder {
 
                 // Inform POIController
                 controller.POIFound();
+
+                isActive = false;
             }
 		}
 	}
 
     public void ResetState()
     {
+        isActive = true;
         isGazed = false;
         SetGazedAt(false);
         GetComponent<Renderer>().material.color = Color.red;
