@@ -17,9 +17,12 @@ public class POI : MonoBehaviour, IGvrGazeResponder {
 	private float gazeStartTime = 0f;
     private bool isActive;
 
+    AudioSource audioSource;
+
 	void Start ()
 	{
 		controller = transform.parent.GetComponent<POIController>();
+        audioSource = GetComponent<AudioSource>();
 		SetGazedAt(false);
         isActive = true;
     }
@@ -46,6 +49,8 @@ public class POI : MonoBehaviour, IGvrGazeResponder {
                 controller.POIFound();
 
                 isActive = false;
+
+                audioSource.Play();
             }
 		}
 	}
